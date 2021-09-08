@@ -1,0 +1,127 @@
+{% extends "template.html" %}
+
+{% block index %}
+
+<div class="container">
+  <div class="row">
+    <p>
+      Publicly available data from LendingClub.com. Lending Club connects people who need money (borrowers) with people who have money (investors). Hopefully, as an investor you would want to invest in people who showed a profile of having a high probability of paying you back.
+We will use lending data from 2007-2010 and be trying to classify and predict whether or not the borrower paid back their loan in full. You can download the data from here.
+Here are what the columns represent:
+    </p>
+  </div>
+  <div class="row">
+    <ol>
+      <li>credit.policy: 1 if the customer meets the credit underwriting criteria of LendingClub.com, and 0 otherwise</li>
+      <li>purpose: The purpose of the loan (takes values "creditcard", "debtconsolidation", "educational", "majorpurchase", "smallbusiness", and "all_other")</li>
+      <li>int.rate: The interest rate of the loan, as a proportion (a rate of 11% would be stored as 0.11). Borrowers judged by LendingClub.com to be more risky are assigned higher interest rates</li>
+      <li>installment: The monthly installments owed by the borrower if the loan is funded</li>
+      <li>log.annual.inc: The natural log of the self-reported annual income of the borrower</li>
+      <li>dti: The debt-to-income ratio of the borrower (amount of debt divided by annual income)</li>
+      <li>fico: The FICO credit score of the borrower</li>
+      <li>days.with.cr.line: The number of days the borrower has had a credit line</li>
+      <li>revol.bal: The borrower's revolving balance (amount unpaid at the end of the credit card billing cycle)</li>
+      <li>revol.util: The borrower's revolving line utilization rate (the amount of the credit line used relative to total credit available)</li>
+      <li>inq.last.6mths: The borrower's number of inquiries by creditors in the last 6 months</li>
+      <li>delinq.2yrs: The number of times the borrower had been 30+ days past due on a payment in the past 2 years</li>
+      <li>pub.rec: The borrower's number of derogatory public records (bankruptcy filings, tax liens, or judgments)</li>
+    </ol>
+  </div>
+</div>
+
+<div class="container">
+  <form action="/predict" method="post">
+    <div class="row align-items-start">
+      <div class="col">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="credit.policy">Credit Policy</label>
+          </div>
+          <select class="custom-select" id="credit.policy" name="credit.policy">
+              <option selected>Choose...</option>
+              <option value="1">Met Credit Underwriting Criteria</option>
+              <option value="0">Did not meet Underwriting Criteria</option>
+          </select>
+        </div>
+      </div>
+      <div class="col">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="purpose">Purpose</label>
+          </div>
+          <select class="custom-select" id="purpose" name="purpose">
+              <option selected>Choose...</option>
+              <option value="credit_card">Credit Card</option>
+              <option value="debt_consolidation">Debt Consolidation</option>
+              <option value="educational">Educational</option>
+              <option value="major_purchase">Major Purchase</option>
+              <option value="small_business">Small Business</option>
+              <option value="all_other">All Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-start">
+      <div class="col">
+            <label for="int_rate" class="form-label">Interest Rate</label>
+            <input type="text" class="form-control" id="int_rate" name="int_rate" value=" {{ request.form['int_rate'] }} ">
+      </div>
+      <div class="col">
+            <label for="installment" class="form-label">Monthly Installment</label>
+            <input type="text" class="form-control" id="installment" name="installment" value=" {{ request.form['installment'] }} ">
+      </div>
+      <div class="col">
+            <label for="log.annual.inc" class="form-label">Log Annual Income</label>
+            <input type="text" class="form-control" id="log.annual.inc" name="log.annual.inc" value=" {{ request.form['log.annual.inc'] }} ">
+      </div>
+      <div class="col">
+            <label for="dti" class="form-label">Debt to Income Ratio</label>
+            <input type="text" class="form-control" id="dti" name="dti" value=" {{ request.form['dti'] }} ">
+      </div>
+      <div class="col">
+            <label for="fico" class="form-label">Fico Score</label>
+            <input type="text" class="form-control" id="fico" name="fico" value=" {{ request.form['fico'] }} ">
+      </div>
+      <div class="col">
+            <label for="days.with.cr.line" class="form-label">Days with Credit Line</label>
+            <input type="text" class="form-control" id="days.with.cr.line" name="days.with.cr.line" value=" {{ request.form['days.with.cr.line'] }} ">
+      </div>
+    </div>
+    <div class="row align-items-start">
+      <div class="col">
+            <label for="revol.bal" class="form-label">Revolving Balance</label>
+            <input type="text" class="form-control" id="revol.bal" name="revol.bal" value=" {{ request.form['revol.bal'] }} ">
+      </div>
+      <div class="col">
+            <label for="revol.util" class="form-label">Revolving Utilization</label>
+            <input type="text" class="form-control" id="revol.util" name="revol.util" value=" {{ request.form['revol.util'] }} ">
+      </div>
+      <div class="col">
+            <label for="inq.last.6mths" class="form-label">Inquiries in last 6 months</label>
+            <input type="text" class="form-control" id="inq.last.6mths" name="inq.last.6mths" value=" {{ request.form['inq.last.6mths'] }} ">
+      </div>
+    </div>
+    <div class="row align-items-start">
+      <div class="col">
+            <label for="delinq.2yrs" class="form-label">Delinquencies in last two years</label>
+            <input type="text" class="form-control" id="delinq.2yrs" name="delinq.2yrs" value=" {{ request.form['delinq.2yrs'] }} ">
+      </div>
+      <div class="col">
+            <label for="pub.rec" class="form-label">Number of derogatory public record</label>
+            <input type="text" class="form-control" id="pub.rec" name="pub.rec" value=" {{ request.form['pub.rec'] }} ">
+      </div>
+    </div>
+          <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3">Submit</button>
+      </div>
+  </form>
+  <p>
+<!--    {% for table in tables %}-->
+<!--            {{titles[loop.index]}}-->
+<!--            {{ table|safe }}-->
+<!--    {% endfor %}-->
+   {{ result }}
+  </p>
+</div>
+
+{% endblock %}
