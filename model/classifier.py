@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 
 import pandas as pd
 import numpy as np
@@ -16,30 +17,13 @@ from xgboost import XGBClassifier
 
 from joblib import dump
 
+# Add util directory to path
+curr_dir = sys.path[0]
+parent_dir = Path(curr_dir).parents[0]
+dir = os.path.join(parent_dir, 'util')
+sys.path.append(dir)
 
-class NumericalFeatures(BaseEstimator, TransformerMixin):
-    def __init__(self):
-        super().__init__()
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X, y=None):
-        X = X.select_dtypes(include=[np.number])
-        return X
-
-
-class CategoricalFeatures(BaseEstimator, TransformerMixin):
-    def __init__(self):
-        super().__init__()
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X, y=None):
-        X = X.select_dtypes(include=['object'])
-        return X
-
+from custom_transformer import NumericalFeatures, CategoricalFeatures
 
 def load_data(file):
     """
