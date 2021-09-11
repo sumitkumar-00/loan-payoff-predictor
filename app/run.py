@@ -32,7 +32,7 @@ def predict():
     test_data = pd.DataFrame(test_data)
     result = model.predict(pd.DataFrame(test_data))
     if result == 1:
-        string = "Loan is not expected to be paid off in full"
+        string = "Loan is not expected to be paid in full"
     else:
         string = "Loan is expected to be paid off"
 
