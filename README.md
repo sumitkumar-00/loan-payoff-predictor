@@ -52,7 +52,7 @@ Following packages were used in this project
 
 ### Executing program <a name='Execution'></a>
 1. Run following commands in project's root directory   
-   * To execute ML pipeline `pipenv run python models/classifier.py data/loan_data.csv`
+   * To execute ML pipeline `pipenv run python model/classifier.py data/loan_data.csv`
    * To run web app execute `pipenv run python run.py` from app's directory
 2. Go to http://127.0.0.1:3201 to check out the app 
 
